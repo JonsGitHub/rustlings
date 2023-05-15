@@ -60,12 +60,13 @@ fn main() {
         match abs_all(&mut input) {
             // TODO
         }
-    // No clone occurs because `input` is already owned.
-    let slice = vec![-1, 0, 1];
-    let mut input = Cow::from(slice);
-    match abs_all(&mut input) {
-        // TODO
-        Cow::Borrowed(_) => println!("I own this slice!"),
-        _ => panic!("expected borrowed value"),
+        // No clone occurs because `input` is already owned.
+        let slice = vec![-1, 0, 1];
+        let mut input = Cow::from(slice);
+        match abs_all(&mut input) {
+            // TODO
+            Cow::Borrowed(_) => println!("I own this slice!"),
+            _ => panic!("expected borrowed value"),
+        }
     }
 }
