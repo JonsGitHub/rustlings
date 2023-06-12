@@ -9,14 +9,18 @@
 // implementing this trait.
 // Execute `rustlings hint traits1` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
 
 trait AppendBar {
     fn append_bar(self) -> Self;
 }
 
+// Made the change here. AppendBar needs to be implemented for String. Whatever is being implemented, define the methods for that trait.
+// All we really have to do in this case is pull the method down from the trait above, and create the intended effect (like an abstract)
+// In this case, we want "Bar" at the end of each String that is passed into append_bar().
 impl AppendBar for String {
-    // TODO: Implement `AppendBar` for type `String`.
+    fn append_bar(self) -> Self {
+        format!("{}Bar", self)
+    }
 }
 
 fn main() {

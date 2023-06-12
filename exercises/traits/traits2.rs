@@ -11,13 +11,28 @@
 // you can do this!
 // Execute `rustlings hint traits2` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
 
 trait AppendBar {
     fn append_bar(self) -> Self;
 }
 
 // TODO: Implement trait `AppendBar` for a vector of strings.
+impl AppendBar for Vec<String> {
+    fn append_bar(mut self) -> Self {
+
+        //Original attempt:
+        //I tried to append "Bar" to each str in the vector, which is not the intended result.
+
+        // for str in self.iter() {
+        //     format!("{}Bar", str);
+        // }
+
+        //Intended result was instead to append to the VECTOR. See below for actual result.
+
+        self.push("Bar".to_string());
+        self
+    }
+}
 
 #[cfg(test)]
 mod tests {
