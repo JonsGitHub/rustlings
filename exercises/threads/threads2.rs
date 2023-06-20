@@ -4,7 +4,7 @@
 // the spawned threads need to be in charge of updating a shared value: JobStatus.jobs_completed
 
 
-use std::sync::Arc;
+use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::Duration;
 
@@ -13,14 +13,19 @@ struct JobStatus {
 }
 
 fn main() {
-    let status = Arc::new(JobStatus { jobs_completed: 0 });
+    let status = Arc::new(Mutex::new(JobStatus { jobs_completed: 0 }));
     let mut handles = vec![];
     for _ in 0..10 {
         let status_shared = Arc::clone(&status);
         let handle = thread::spawn(move || {
             thread::sleep(Duration::from_millis(250));
             // TODO: You must take an action before you update a shared value
-            status_shared.jobs_completed += 1;
+            let mut num = status_shared.lock().unwrap();
+            num.jobs_completed += 1; //Why not *status_shared.jobs_completed?
+            //From https://stackoverflow.com/questions/56624004/rustlings-thread-exercise-why-do-i-not-dereference-mutexstruct :
+            // dereferencing is automatic when behind a "."
+            // So in other words you don't need to dereference using * to get the jobs_completed field
+            // ... But why do I need to deref in the first place?
         });
         handles.push(handle);
     }
@@ -28,6 +33,6 @@ fn main() {
         handle.join().unwrap();
         // TODO: Print the value of the JobStatus.jobs_completed. Did you notice anything
         // interesting in the output? Do you have to 'join' on all the handles?
-        println!("jobs completed {}", ???);
     }
+    println!("jobs completed {}", status.lock().unwrap().jobs_completed);
 }
